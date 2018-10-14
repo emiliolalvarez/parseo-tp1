@@ -15,6 +15,7 @@ public class FlechaListenerParser implements FlechaListener {
 
     private List<String> output = new ArrayList<>();
     private Integer indentation = 0;
+    private Integer listExpressionLevel = 0;
 
     private void clearOutputBuffer() {
         output = new ArrayList<>();
@@ -178,11 +179,42 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void enterListExpression(FlechaParser.ListExpressionContext ctx) {
-
+        listExpressionLevel++;
+        if (listExpressionLevel == 1) {
+            addBreakLine();
+            increaseIndentationAndIndent();
+        }
+        output.add("[\"ExprApply\",");
+        addBreakLine();
+        increaseIndentationAndIndent();
+        output.add("[\"ExprApply\",");
+        addBreakLine();
+        increaseIndentationAndIndent();
+        output.add("[\"ExprConstructor\", \"Cons\"],");
+        decreaseIndentation();
     }
 
     @Override
     public void exitListExpression(FlechaParser.ListExpressionContext ctx) {
+        addBreakLine();
+        indent();
+        output.add("]");
+        if (listExpressionLevel == 1) {
+            decreaseIndentation();
+        }
+        listExpressionLevel--;
+    }
+
+    @Override
+    public void enterListExpression2(FlechaParser.ListExpression2Context ctx) {
+        addBreakLine();
+        indent();
+        output.add("],");
+        decreaseIndentation();
+    }
+
+    @Override
+    public void exitListExpression2(FlechaParser.ListExpression2Context ctx) {
 
     }
 

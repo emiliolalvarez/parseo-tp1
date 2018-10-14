@@ -54,7 +54,8 @@ unaryOperator           : NEGATION | MINUS ;
 
 applicationExpresion    : listExpression | atomicExpression | applicationExpresion atomicExpression ;
 
-listExpression          : CONS atomicExpression externalExpression;
+listExpression          : CONS atomicExpression listExpression2;
+listExpression2         : externalExpression;
 
 atomicExpression        : NUMBER | LOWERID | UPPERID | CHAR | LITERAL
                         | LBRACKET expression RBRACKET;

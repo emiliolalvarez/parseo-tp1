@@ -188,6 +188,16 @@ public interface FlechaListener extends ParseTreeListener {
 	 */
 	void exitListExpression(FlechaParser.ListExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FlechaParser#listExpression2}.
+	 * @param ctx the parse tree
+	 */
+	void enterListExpression2(FlechaParser.ListExpression2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link FlechaParser#listExpression2}.
+	 * @param ctx the parse tree
+	 */
+	void exitListExpression2(FlechaParser.ListExpression2Context ctx);
+	/**
 	 * Enter a parse tree produced by {@link FlechaParser#atomicExpression}.
 	 * @param ctx the parse tree
 	 */

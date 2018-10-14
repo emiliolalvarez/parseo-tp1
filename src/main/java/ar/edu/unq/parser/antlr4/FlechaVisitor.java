@@ -119,6 +119,12 @@ public interface FlechaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitListExpression(FlechaParser.ListExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FlechaParser#listExpression2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListExpression2(FlechaParser.ListExpression2Context ctx);
+	/**
 	 * Visit a parse tree produced by {@link FlechaParser#atomicExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
