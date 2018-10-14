@@ -232,13 +232,13 @@ public class FlechaBaseListener implements FlechaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterListExpression2(FlechaParser.ListExpression2Context ctx) { }
+	@Override public void enterListSubExpression(FlechaParser.ListSubExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitListExpression2(FlechaParser.ListExpression2Context ctx) { }
+	@Override public void exitListSubExpression(FlechaParser.ListSubExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -251,6 +251,18 @@ public class FlechaBaseListener implements FlechaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAtomicExpression(FlechaParser.AtomicExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAtomicExpression2(FlechaParser.AtomicExpression2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAtomicExpression2(FlechaParser.AtomicExpression2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

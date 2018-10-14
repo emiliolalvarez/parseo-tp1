@@ -54,11 +54,13 @@ unaryOperator           : NEGATION | MINUS ;
 
 applicationExpresion    : listExpression | atomicExpression | applicationExpresion atomicExpression ;
 
-listExpression          : CONS atomicExpression listExpression2;
-listExpression2         : externalExpression;
+listExpression          : CONS atomicExpression listSubExpression;
+listSubExpression       : atomicExpression;
 
 atomicExpression        : NUMBER | LOWERID | UPPERID | CHAR | LITERAL
-                        | LBRACKET expression RBRACKET;
+                        | atomicExpression2;
+atomicExpression2       : LBRACKET expression RBRACKET;
+
 
 parameters              : LOWERID parameters
                         | ;

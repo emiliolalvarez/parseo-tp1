@@ -206,7 +206,7 @@ public class FlechaListenerParser implements FlechaListener {
     }
 
     @Override
-    public void enterListExpression2(FlechaParser.ListExpression2Context ctx) {
+    public void enterListSubExpression(FlechaParser.ListSubExpressionContext ctx) {
         addBreakLine();
         indent();
         output.add("],");
@@ -214,7 +214,7 @@ public class FlechaListenerParser implements FlechaListener {
     }
 
     @Override
-    public void exitListExpression2(FlechaParser.ListExpression2Context ctx) {
+    public void exitListSubExpression(FlechaParser.ListSubExpressionContext ctx) {
 
     }
 
@@ -276,18 +276,40 @@ public class FlechaListenerParser implements FlechaListener {
             output.add("[\"ExprVar\", \"" + ctx.LOWERID().getText() + "\"]");
         } else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() < 4) {
             output.add("[\"ExprChar\", " + ((int)ctx.CHAR().getText().charAt(1)) + "]");
-        }  else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() == 4) {
+        } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() == 2 && listExpressionLevel > 0) { //Empty literal inside list construction
+            output.add("[\"ExprConstructor\", \"Nil\"]");
+        } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() > 2 && listExpressionLevel > 0) { //Not empty literal inside list construction
+            //outputStringAsListConstruction(ctx.LITERAL().getText());
+        } else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() == 4) {
             output.add("[\"ExprChar\", " + (int)StringEscapeUtils.unescapeJava(ctx.CHAR().getText().substring(1,3)).charAt(0) + "]");
-        }  else if(ctx.UPPERID() != null) {
+        } else if(ctx.UPPERID() != null) {
             output.add("[\"ExprConstructor\", \"" + ctx.UPPERID().getText() + "\"]");
         }
+    }
 
+    private void outputStringAsListConstruction(String literal) {
+        for (char character: literal.toCharArray()) {
+            addBreakLine();
+            output.add("[\"ExprConstructor\", \"Cons\"]");
+            output.add("[\"ExprChar\", " + ((int)character) + "]");
+        }
     }
 
     @Override
     public void exitAtomicExpression(FlechaParser.AtomicExpressionContext ctx) {
         decreaseIndentation();
     }
+
+    @Override
+    public void enterAtomicExpression2(FlechaParser.AtomicExpression2Context ctx) {
+
+    }
+
+    @Override
+    public void exitAtomicExpression2(FlechaParser.AtomicExpression2Context ctx) {
+
+    }
+
 
     @Override
     public void enterParameters(FlechaParser.ParametersContext ctx) {
