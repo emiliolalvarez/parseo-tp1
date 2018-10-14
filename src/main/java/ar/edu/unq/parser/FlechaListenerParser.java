@@ -146,6 +146,16 @@ public class FlechaListenerParser implements FlechaListener {
     }
 
     @Override
+    public void enterListExpression(FlechaParser.ListExpressionContext ctx) {
+
+    }
+
+    @Override
+    public void exitListExpression(FlechaParser.ListExpressionContext ctx) {
+
+    }
+
+    @Override
     public void enterInternalExpression(FlechaParser.InternalExpressionContext ctx) {
     }
 

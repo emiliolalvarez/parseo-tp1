@@ -52,9 +52,11 @@ binaryOperator          : AND | OR | EQ | NE | GE | LE | GT | LT | PLUS | MINUS 
 
 unaryOperator           : NEGATION | MINUS ;
 
-applicationExpresion    : atomicExpression | applicationExpresion atomicExpression ;
+applicationExpresion    : listExpression | atomicExpression | applicationExpresion atomicExpression ;
 
-atomicExpression        : NUMBER | LOWERID | UPPERID | CHAR
+listExpression          : CONS atomicExpression externalExpression;
+
+atomicExpression        : NUMBER | LOWERID | UPPERID | CHAR | LITERAL
                         | LBRACKET expression RBRACKET;
 
 parameters              : LOWERID parameters
@@ -124,6 +126,7 @@ ID                      : [0-9]+ ;
 
 LOWERID                 : [a-z]+CHARS* ;
 UPPERID                 : [A-Z]+CHARS* ;
+LITERAL                 : QUOTE CHARS* QUOTE;
 CHARS                   : [a-zA-Z0-9_] ;
 CHAR                    : SINGLEQUOTE([a-zA-Z0-9=()]|' '|'\\\\'|'\\t'|'\\n'|'\\r'|'\\'SINGLEQUOTE|'\\"')SINGLEQUOTE;
 LAMBDA                  : LOWERID BACKSLASH ;

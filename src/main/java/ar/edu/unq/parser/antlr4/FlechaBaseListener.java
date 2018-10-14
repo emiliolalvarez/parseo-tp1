@@ -220,6 +220,18 @@ public class FlechaBaseListener implements FlechaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterListExpression(FlechaParser.ListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListExpression(FlechaParser.ListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAtomicExpression(FlechaParser.AtomicExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
