@@ -14,9 +14,31 @@ import java.util.List;
 public class FlechaListenerParser implements FlechaListener {
 
     private List<String> output = new ArrayList<>();
+    private Integer indentation = 0;
 
-    public void clearOutputBuffer() {
+    private void clearOutputBuffer() {
         output = new ArrayList<>();
+    }
+
+    private void indent() {
+        output.add(StringUtils.repeat(" ", indentation));
+    }
+
+    private void increaseIndentation() {
+        indentation+=1;
+    }
+
+    private void decreaseIndentation() {
+        indentation-=1;
+    }
+
+    private void increaseIndentationAndIndent() {
+        increaseIndentation();
+        indent();
+    }
+
+    private void addBreakLine() {
+        output.add("\n");
     }
 
     public String getOutput() {
@@ -30,8 +52,11 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void exitProgram(FlechaParser.ProgramContext ctx) {
-        output.add("\n]\n");
+        addBreakLine();
+        output.add("]");
+        addBreakLine();
     }
+
 
     @Override
     public void enterProgram1(FlechaParser.Program1Context ctx) {
@@ -46,13 +71,19 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void enterDefinition(FlechaParser.DefinitionContext ctx) {
-        output.add("\n [\"" + StringUtils.capitalize(ctx.DEF().toString()) + "\", \"" + ctx.LOWERID() + "\",");
+        addBreakLine();
+        increaseIndentationAndIndent();
+        output.add("[");
+        output.add("\"" + StringUtils.capitalize(ctx.DEF().toString()) + "\", \"" + ctx.LOWERID() + "\",");
     }
 
     @Override
     public void exitDefinition(FlechaParser.DefinitionContext ctx) {
         Boolean isLastNode = ctx.getParent().children.get(1).getChildCount() == 0;
-        output.add("\n ]" + (isLastNode ? "" : "," ));
+        addBreakLine();
+        indent();
+        output.add("]" + (isLastNode ? "" : "," ));
+        decreaseIndentation();
     }
 
     @Override
@@ -205,23 +236,25 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void enterAtomicExpression(FlechaParser.AtomicExpressionContext ctx) {
+        addBreakLine();
+        increaseIndentationAndIndent();
         if (ctx.NUMBER() != null) {
-            output.add("\n  [\"ExprNumber\", " + Integer.parseInt(ctx.NUMBER().getText()) + "]");
+            output.add("[\"ExprNumber\", " + Integer.parseInt(ctx.NUMBER().getText()) + "]");
         } else if(ctx.LOWERID() !=null) {
-            output.add("\n  [\"ExprVar\", \"" + ctx.LOWERID().getText() + "\"]");
+            output.add("[\"ExprVar\", \"" + ctx.LOWERID().getText() + "\"]");
         } else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() < 4) {
-            output.add("\n  [\"ExprChar\", " + ((int)ctx.CHAR().getText().charAt(1)) + "]");
+            output.add("[\"ExprChar\", " + ((int)ctx.CHAR().getText().charAt(1)) + "]");
         }  else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() == 4) {
-            output.add("\n  [\"ExprChar\", " + (int)StringEscapeUtils.unescapeJava(ctx.CHAR().getText().substring(1,3)).charAt(0) + "]");
+            output.add("[\"ExprChar\", " + (int)StringEscapeUtils.unescapeJava(ctx.CHAR().getText().substring(1,3)).charAt(0) + "]");
         }  else if(ctx.UPPERID() != null) {
-            output.add("\n  [\"ExprConstructor\", \"" + ctx.UPPERID().getText() + "\"]");
+            output.add("[\"ExprConstructor\", \"" + ctx.UPPERID().getText() + "\"]");
         }
 
     }
 
     @Override
     public void exitAtomicExpression(FlechaParser.AtomicExpressionContext ctx) {
-
+        decreaseIndentation();
     }
 
     @Override
