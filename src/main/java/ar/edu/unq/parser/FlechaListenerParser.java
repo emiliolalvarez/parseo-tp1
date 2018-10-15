@@ -17,6 +17,7 @@ public class FlechaListenerParser implements FlechaListener {
     private Integer indentation = 0;
     private Integer listExpressionLevel = 0;
 
+
     private void clearOutputBuffer() {
         output = new ArrayList<>();
     }
@@ -72,6 +73,9 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void enterDefinition(FlechaParser.DefinitionContext ctx) {
+        if (output.get(output.size()-1).endsWith("]")) {
+            output.add(",");
+        }
         addBreakLine();
         increaseIndentationAndIndent();
         output.add("[");
@@ -80,10 +84,9 @@ public class FlechaListenerParser implements FlechaListener {
 
     @Override
     public void exitDefinition(FlechaParser.DefinitionContext ctx) {
-        Boolean isLastNode = ctx.getParent().children.get(1).getChildCount() == 0;
         addBreakLine();
         indent();
-        output.add("]" + (isLastNode ? "" : "," ));
+        output.add("]");
         decreaseIndentation();
     }
 
@@ -180,10 +183,8 @@ public class FlechaListenerParser implements FlechaListener {
     @Override
     public void enterListExpression(FlechaParser.ListExpressionContext ctx) {
         listExpressionLevel++;
-        if (listExpressionLevel == 1) {
-            addBreakLine();
-            increaseIndentationAndIndent();
-        }
+        addBreakLine();
+        increaseIndentationAndIndent();
         output.add("[\"ExprApply\",");
         addBreakLine();
         increaseIndentationAndIndent();
@@ -192,17 +193,15 @@ public class FlechaListenerParser implements FlechaListener {
         increaseIndentationAndIndent();
         output.add("[\"ExprConstructor\", \"Cons\"],");
         decreaseIndentation();
-    }
+ }
 
     @Override
     public void exitListExpression(FlechaParser.ListExpressionContext ctx) {
+        listExpressionLevel--;
         addBreakLine();
         indent();
         output.add("]");
-        if (listExpressionLevel == 1) {
-            decreaseIndentation();
-        }
-        listExpressionLevel--;
+        decreaseIndentation();
     }
 
     @Override
@@ -210,11 +209,31 @@ public class FlechaListenerParser implements FlechaListener {
         addBreakLine();
         indent();
         output.add("],");
-        decreaseIndentation();
     }
 
     @Override
     public void exitListSubExpression(FlechaParser.ListSubExpressionContext ctx) {
+
+    }
+
+    @Override
+    public void enterListBraceExpression(FlechaParser.ListBraceExpressionContext ctx) {
+        decreaseIndentation();
+    }
+
+    @Override
+    public void exitListBraceExpression(FlechaParser.ListBraceExpressionContext ctx) {
+
+    }
+
+
+    @Override
+    public void enterListAtomicExpression(FlechaParser.ListAtomicExpressionContext ctx) {
+        decreaseIndentation();
+    }
+
+    @Override
+    public void exitListAtomicExpression(FlechaParser.ListAtomicExpressionContext ctx) {
 
     }
 
@@ -279,7 +298,8 @@ public class FlechaListenerParser implements FlechaListener {
         } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() == 2 && listExpressionLevel > 0) { //Empty literal inside list construction
             output.add("[\"ExprConstructor\", \"Nil\"]");
         } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() > 2 && listExpressionLevel > 0) { //Not empty literal inside list construction
-            //outputStringAsListConstruction(ctx.LITERAL().getText());
+            System.out.println("Literal inside list construction expression: " +ctx.LITERAL().getText());
+            outputStringAsListConstruction(ctx.LITERAL().getText().replaceAll("\"",""));
         } else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() == 4) {
             output.add("[\"ExprChar\", " + (int)StringEscapeUtils.unescapeJava(ctx.CHAR().getText().substring(1,3)).charAt(0) + "]");
         } else if(ctx.UPPERID() != null) {
@@ -287,17 +307,10 @@ public class FlechaListenerParser implements FlechaListener {
         }
     }
 
-    private void outputStringAsListConstruction(String literal) {
-        for (char character: literal.toCharArray()) {
-            addBreakLine();
-            output.add("[\"ExprConstructor\", \"Cons\"]");
-            output.add("[\"ExprChar\", " + ((int)character) + "]");
-        }
-    }
-
     @Override
     public void exitAtomicExpression(FlechaParser.AtomicExpressionContext ctx) {
-        decreaseIndentation();
+            decreaseIndentation();
+
     }
 
     @Override
@@ -339,6 +352,44 @@ public class FlechaListenerParser implements FlechaListener {
     @Override
     public void exitEveryRule(ParserRuleContext parserRuleContext) {
 
+    }
+
+    private void outputStringAsListConstruction(String literal) {
+        for (int i= 0; i < literal.length() ; i++) {
+            char character = literal.charAt(i);
+            if (i > 0) {
+                addBreakLine();
+                increaseIndentationAndIndent();
+            }
+            output.add("[\"ExprApply\",");
+            addBreakLine();
+            increaseIndentationAndIndent();
+            output.add("[\"ExprApply\",");
+            addBreakLine();
+            increaseIndentationAndIndent();
+            output.add("[\"ExprConstructor\", \"Cons\"],");
+            addBreakLine();
+            indent();
+            output.add("[\"ExprChar\", " + ((int)character) + "]");
+            addBreakLine();
+            decreaseIndentation();
+            indent();
+            output.add("]," );
+            if (i == literal.length() -1 ) {
+                addBreakLine();
+                indent();
+                output.add("[\"ExprConstructor\", \"Nil\"]");
+            } else {
+                decreaseIndentation();
+            }
+        }
+        //Close each character expression
+        for (int i = 0; i < literal.length() ; i++ ) {
+            addBreakLine();
+            decreaseIndentation();
+            indent();
+            output.add("]");
+        }
     }
 }
 

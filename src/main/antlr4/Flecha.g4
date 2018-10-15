@@ -55,7 +55,9 @@ unaryOperator           : NEGATION | MINUS ;
 applicationExpresion    : listExpression | atomicExpression | applicationExpresion atomicExpression ;
 
 listExpression          : CONS atomicExpression listSubExpression;
-listSubExpression       : atomicExpression;
+listSubExpression       : listBraceExpression | listAtomicExpression;
+listBraceExpression     : LBRACKET expression RBRACKET ;
+listAtomicExpression    : atomicExpression;
 
 atomicExpression        : NUMBER | LOWERID | UPPERID | CHAR | LITERAL
                         | atomicExpression2;
