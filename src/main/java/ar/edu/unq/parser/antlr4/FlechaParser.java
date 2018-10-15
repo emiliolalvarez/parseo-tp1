@@ -17,12 +17,12 @@ public class FlechaParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		DEF=1, CONS=2, IF=3, THEN=4, ELIF=5, ELSE=6, CASE=7, LET=8, IN=9, DEFEQ=10, 
-		SEMICOLON=11, LBRACKET=12, RBRACKET=13, BACKSLASH=14, PIPE=15, ARROW=16, 
-		SINGLEQUOTE=17, QUOTE=18, AND=19, OR=20, NEGATION=21, EQ=22, NE=23, GE=24, 
-		LE=25, GT=26, LT=27, PLUS=28, MINUS=29, TIMES=30, DIV=31, MOD=32, WHITESPACE=33, 
-		NEWLINE=34, COMMENT=35, NUMBER=36, ID=37, LOWERID=38, UPPERID=39, LITERAL=40, 
-		CHARS=41, CHAR=42, LAMBDA=43, STRING=44;
+		DEF=1, IF=2, THEN=3, ELIF=4, ELSE=5, CASE=6, LET=7, IN=8, DEFEQ=9, SEMICOLON=10, 
+		LBRACKET=11, RBRACKET=12, BACKSLASH=13, PIPE=14, ARROW=15, SINGLEQUOTE=16, 
+		QUOTE=17, AND=18, OR=19, NEGATION=20, EQ=21, NE=22, GE=23, LE=24, GT=25, 
+		LT=26, PLUS=27, MINUS=28, TIMES=29, DIV=30, MOD=31, WHITESPACE=32, NEWLINE=33, 
+		COMMENT=34, NUMBER=35, ID=36, LOWERID=37, UPPERID=38, LITERAL=39, CHARS=40, 
+		CHAR=41, LAMBDA=42, STRING=43;
 	public static final int
 		RULE_program = 0, RULE_program1 = 1, RULE_definition = 2, RULE_expression = 3, 
 		RULE_externalExpression = 4, RULE_ifExpression = 5, RULE_elseBranch = 6, 
@@ -42,18 +42,18 @@ public class FlechaParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'def'", "'Cons'", "'if'", "'then'", "'elif'", "'else'", "'case'", 
-		"'let'", "'in'", "'='", "';'", "'('", "')'", "'\\'", "'|'", "'->'", "'''", 
-		"'\"'", "'&&'", "'||'", "'!'", "'=='", "'!='", "'>='", "'<='", "'>'", 
-		"'<'", "'+'", "'-'", "'*'", "'/'", "'%'", "' '"
+		null, "'def'", "'if'", "'then'", "'elif'", "'else'", "'case'", "'let'", 
+		"'in'", "'='", "';'", "'('", "')'", "'\\'", "'|'", "'->'", "'''", "'\"'", 
+		"'&&'", "'||'", "'!'", "'=='", "'!='", "'>='", "'<='", "'>'", "'<'", "'+'", 
+		"'-'", "'*'", "'/'", "'%'", "' '"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "DEF", "CONS", "IF", "THEN", "ELIF", "ELSE", "CASE", "LET", "IN", 
-		"DEFEQ", "SEMICOLON", "LBRACKET", "RBRACKET", "BACKSLASH", "PIPE", "ARROW", 
-		"SINGLEQUOTE", "QUOTE", "AND", "OR", "NEGATION", "EQ", "NE", "GE", "LE", 
-		"GT", "LT", "PLUS", "MINUS", "TIMES", "DIV", "MOD", "WHITESPACE", "NEWLINE", 
-		"COMMENT", "NUMBER", "ID", "LOWERID", "UPPERID", "LITERAL", "CHARS", "CHAR", 
-		"LAMBDA", "STRING"
+		null, "DEF", "IF", "THEN", "ELIF", "ELSE", "CASE", "LET", "IN", "DEFEQ", 
+		"SEMICOLON", "LBRACKET", "RBRACKET", "BACKSLASH", "PIPE", "ARROW", "SINGLEQUOTE", 
+		"QUOTE", "AND", "OR", "NEGATION", "EQ", "NE", "GE", "LE", "GT", "LT", 
+		"PLUS", "MINUS", "TIMES", "DIV", "MOD", "WHITESPACE", "NEWLINE", "COMMENT", 
+		"NUMBER", "ID", "LOWERID", "UPPERID", "LITERAL", "CHARS", "CHAR", "LAMBDA", 
+		"STRING"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -396,7 +396,6 @@ public class FlechaParser extends Parser {
 				letExpression();
 				}
 				break;
-			case CONS:
 			case LBRACKET:
 			case NEGATION:
 			case MINUS:
@@ -888,7 +887,6 @@ public class FlechaParser extends Parser {
 			setState(124);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case CONS:
 			case LBRACKET:
 			case NUMBER:
 			case LOWERID:
@@ -1156,26 +1154,19 @@ public class FlechaParser extends Parser {
 			{
 			setState(140);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case CONS:
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			case 1:
 				{
 				setState(138);
 				listExpression();
 				}
 				break;
-			case LBRACKET:
-			case NUMBER:
-			case LOWERID:
-			case UPPERID:
-			case LITERAL:
-			case CHAR:
+			case 2:
 				{
 				setState(139);
 				atomicExpression();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(146);
@@ -1214,7 +1205,7 @@ public class FlechaParser extends Parser {
 	}
 
 	public static class ListExpressionContext extends ParserRuleContext {
-		public TerminalNode CONS() { return getToken(FlechaParser.CONS, 0); }
+		public TerminalNode UPPERID() { return getToken(FlechaParser.UPPERID, 0); }
 		public AtomicExpressionContext atomicExpression() {
 			return getRuleContext(AtomicExpressionContext.class,0);
 		}
@@ -1247,7 +1238,7 @@ public class FlechaParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(149);
-			match(CONS);
+			match(UPPERID);
 			setState(150);
 			atomicExpression();
 			setState(151);
@@ -1638,7 +1629,7 @@ public class FlechaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3.\u00b7\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3-\u00b7\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -1652,24 +1643,24 @@ public class FlechaParser extends Parser {
 		"\3\23\3\23\3\24\3\24\5\24\u009e\n\24\3\25\3\25\3\25\3\25\3\26\3\26\3\27"+
 		"\3\27\3\27\3\27\3\27\3\27\5\27\u00ac\n\27\3\30\3\30\3\30\3\30\3\31\3\31"+
 		"\3\31\5\31\u00b5\n\31\3\31\2\3\"\32\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
-		"\36 \"$&(*,.\60\2\4\4\2\25\26\30\"\4\2\27\27\37\37\2\u00b0\2\62\3\2\2"+
-		"\2\48\3\2\2\2\6:\3\2\2\2\bE\3\2\2\2\nL\3\2\2\2\fN\3\2\2\2\16T\3\2\2\2"+
-		"\20Z\3\2\2\2\22b\3\2\2\2\24d\3\2\2\2\26j\3\2\2\2\30r\3\2\2\2\32~\3\2\2"+
-		"\2\34\u0085\3\2\2\2\36\u0087\3\2\2\2 \u0089\3\2\2\2\"\u008e\3\2\2\2$\u0097"+
+		"\36 \"$&(*,.\60\2\4\4\2\24\25\27!\4\2\26\26\36\36\2\u00b0\2\62\3\2\2\2"+
+		"\48\3\2\2\2\6:\3\2\2\2\bE\3\2\2\2\nL\3\2\2\2\fN\3\2\2\2\16T\3\2\2\2\20"+
+		"Z\3\2\2\2\22b\3\2\2\2\24d\3\2\2\2\26j\3\2\2\2\30r\3\2\2\2\32~\3\2\2\2"+
+		"\34\u0085\3\2\2\2\36\u0087\3\2\2\2 \u0089\3\2\2\2\"\u008e\3\2\2\2$\u0097"+
 		"\3\2\2\2&\u009d\3\2\2\2(\u009f\3\2\2\2*\u00a3\3\2\2\2,\u00ab\3\2\2\2."+
 		"\u00ad\3\2\2\2\60\u00b4\3\2\2\2\62\63\5\4\3\2\63\3\3\2\2\2\64\65\5\6\4"+
 		"\2\65\66\5\4\3\2\669\3\2\2\2\679\3\2\2\28\64\3\2\2\28\67\3\2\2\29\5\3"+
-		"\2\2\2:;\7\3\2\2;<\7(\2\2<=\5\60\31\2=>\7\f\2\2>?\5\b\5\2?\7\3\2\2\2@"+
-		"F\5\n\6\2AB\5\n\6\2BC\7\r\2\2CD\5\b\5\2DF\3\2\2\2E@\3\2\2\2EA\3\2\2\2"+
+		"\2\2\2:;\7\3\2\2;<\7\'\2\2<=\5\60\31\2=>\7\13\2\2>?\5\b\5\2?\7\3\2\2\2"+
+		"@F\5\n\6\2AB\5\n\6\2BC\7\f\2\2CD\5\b\5\2DF\3\2\2\2E@\3\2\2\2EA\3\2\2\2"+
 		"F\t\3\2\2\2GM\5\f\7\2HM\5\20\t\2IM\5\26\f\2JM\5\32\16\2KM\5\30\r\2LG\3"+
-		"\2\2\2LH\3\2\2\2LI\3\2\2\2LJ\3\2\2\2LK\3\2\2\2M\13\3\2\2\2NO\7\5\2\2O"+
-		"P\5\32\16\2PQ\7\6\2\2QR\5\32\16\2RS\5\16\b\2S\r\3\2\2\2TU\7\7\2\2UV\5"+
-		"\32\16\2VW\7\6\2\2WX\5\32\16\2XY\5\16\b\2Y\17\3\2\2\2Z[\7\t\2\2[\\\5\32"+
+		"\2\2\2LH\3\2\2\2LI\3\2\2\2LJ\3\2\2\2LK\3\2\2\2M\13\3\2\2\2NO\7\4\2\2O"+
+		"P\5\32\16\2PQ\7\5\2\2QR\5\32\16\2RS\5\16\b\2S\r\3\2\2\2TU\7\6\2\2UV\5"+
+		"\32\16\2VW\7\5\2\2WX\5\32\16\2XY\5\16\b\2Y\17\3\2\2\2Z[\7\b\2\2[\\\5\32"+
 		"\16\2\\]\5\22\n\2]\21\3\2\2\2^_\5\24\13\2_`\5\24\13\2`c\3\2\2\2ac\3\2"+
-		"\2\2b^\3\2\2\2ba\3\2\2\2c\23\3\2\2\2de\7\21\2\2ef\7)\2\2fg\5\60\31\2g"+
-		"h\7\22\2\2hi\5\32\16\2i\25\3\2\2\2jk\7\n\2\2kl\7\'\2\2lm\5\60\31\2mn\7"+
-		"\f\2\2no\5\32\16\2op\7\13\2\2pq\5\n\6\2q\27\3\2\2\2rs\7-\2\2st\5\60\31"+
-		"\2tu\7\22\2\2uv\5\n\6\2v\31\3\2\2\2wx\5\"\22\2xy\5\34\17\2y\177\3\2\2"+
+		"\2\2b^\3\2\2\2ba\3\2\2\2c\23\3\2\2\2de\7\20\2\2ef\7(\2\2fg\5\60\31\2g"+
+		"h\7\21\2\2hi\5\32\16\2i\25\3\2\2\2jk\7\t\2\2kl\7&\2\2lm\5\60\31\2mn\7"+
+		"\13\2\2no\5\32\16\2op\7\n\2\2pq\5\n\6\2q\27\3\2\2\2rs\7,\2\2st\5\60\31"+
+		"\2tu\7\21\2\2uv\5\n\6\2v\31\3\2\2\2wx\5\"\22\2xy\5\34\17\2y\177\3\2\2"+
 		"\2z{\5 \21\2{|\5\32\16\2|}\5\34\17\2}\177\3\2\2\2~w\3\2\2\2~z\3\2\2\2"+
 		"\177\33\3\2\2\2\u0080\u0081\5\36\20\2\u0081\u0082\5\32\16\2\u0082\u0083"+
 		"\5\34\17\2\u0083\u0086\3\2\2\2\u0084\u0086\3\2\2\2\u0085\u0080\3\2\2\2"+
@@ -1678,18 +1669,18 @@ public class FlechaParser extends Parser {
 		"\5$\23\2\u008d\u008f\5,\27\2\u008e\u008b\3\2\2\2\u008e\u008d\3\2\2\2\u008f"+
 		"\u0094\3\2\2\2\u0090\u0091\f\3\2\2\u0091\u0093\5,\27\2\u0092\u0090\3\2"+
 		"\2\2\u0093\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3\2\2\2\u0095"+
-		"#\3\2\2\2\u0096\u0094\3\2\2\2\u0097\u0098\7\4\2\2\u0098\u0099\5,\27\2"+
-		"\u0099\u009a\5&\24\2\u009a%\3\2\2\2\u009b\u009e\5(\25\2\u009c\u009e\5"+
-		"*\26\2\u009d\u009b\3\2\2\2\u009d\u009c\3\2\2\2\u009e\'\3\2\2\2\u009f\u00a0"+
-		"\7\16\2\2\u00a0\u00a1\5\b\5\2\u00a1\u00a2\7\17\2\2\u00a2)\3\2\2\2\u00a3"+
-		"\u00a4\5,\27\2\u00a4+\3\2\2\2\u00a5\u00ac\7&\2\2\u00a6\u00ac\7(\2\2\u00a7"+
-		"\u00ac\7)\2\2\u00a8\u00ac\7,\2\2\u00a9\u00ac\7*\2\2\u00aa\u00ac\5.\30"+
-		"\2\u00ab\u00a5\3\2\2\2\u00ab\u00a6\3\2\2\2\u00ab\u00a7\3\2\2\2\u00ab\u00a8"+
-		"\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ab\u00aa\3\2\2\2\u00ac-\3\2\2\2\u00ad"+
-		"\u00ae\7\16\2\2\u00ae\u00af\5\b\5\2\u00af\u00b0\7\17\2\2\u00b0/\3\2\2"+
-		"\2\u00b1\u00b2\7(\2\2\u00b2\u00b5\5\60\31\2\u00b3\u00b5\3\2\2\2\u00b4"+
-		"\u00b1\3\2\2\2\u00b4\u00b3\3\2\2\2\u00b5\61\3\2\2\2\r8ELb~\u0085\u008e"+
-		"\u0094\u009d\u00ab\u00b4";
+		"#\3\2\2\2\u0096\u0094\3\2\2\2\u0097\u0098\7(\2\2\u0098\u0099\5,\27\2\u0099"+
+		"\u009a\5&\24\2\u009a%\3\2\2\2\u009b\u009e\5(\25\2\u009c\u009e\5*\26\2"+
+		"\u009d\u009b\3\2\2\2\u009d\u009c\3\2\2\2\u009e\'\3\2\2\2\u009f\u00a0\7"+
+		"\r\2\2\u00a0\u00a1\5\b\5\2\u00a1\u00a2\7\16\2\2\u00a2)\3\2\2\2\u00a3\u00a4"+
+		"\5,\27\2\u00a4+\3\2\2\2\u00a5\u00ac\7%\2\2\u00a6\u00ac\7\'\2\2\u00a7\u00ac"+
+		"\7(\2\2\u00a8\u00ac\7+\2\2\u00a9\u00ac\7)\2\2\u00aa\u00ac\5.\30\2\u00ab"+
+		"\u00a5\3\2\2\2\u00ab\u00a6\3\2\2\2\u00ab\u00a7\3\2\2\2\u00ab\u00a8\3\2"+
+		"\2\2\u00ab\u00a9\3\2\2\2\u00ab\u00aa\3\2\2\2\u00ac-\3\2\2\2\u00ad\u00ae"+
+		"\7\r\2\2\u00ae\u00af\5\b\5\2\u00af\u00b0\7\16\2\2\u00b0/\3\2\2\2\u00b1"+
+		"\u00b2\7\'\2\2\u00b2\u00b5\5\60\31\2\u00b3\u00b5\3\2\2\2\u00b4\u00b1\3"+
+		"\2\2\2\u00b4\u00b3\3\2\2\2\u00b5\61\3\2\2\2\r8ELb~\u0085\u008e\u0094\u009d"+
+		"\u00ab\u00b4";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

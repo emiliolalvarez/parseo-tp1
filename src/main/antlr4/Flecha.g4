@@ -54,7 +54,7 @@ unaryOperator           : NEGATION | MINUS ;
 
 applicationExpresion    : listExpression | atomicExpression | applicationExpresion atomicExpression ;
 
-listExpression          : CONS atomicExpression listSubExpression;
+listExpression          : UPPERID atomicExpression listSubExpression;
 listSubExpression       : listBraceExpression | listAtomicExpression;
 listBraceExpression     : LBRACKET expression RBRACKET ;
 listAtomicExpression    : atomicExpression;
@@ -74,8 +74,6 @@ parameters              : LOWERID parameters
 // definitions
 DEF                     : 'def' ;
 
-// cons
-CONS                    : 'Cons' ;
 
 // conditionals
 IF                      : 'if' ;

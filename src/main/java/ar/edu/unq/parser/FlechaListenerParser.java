@@ -191,7 +191,7 @@ public class FlechaListenerParser implements FlechaListener {
         output.add("[\"ExprApply\",");
         addBreakLine();
         increaseIndentationAndIndent();
-        output.add("[\"ExprConstructor\", \"Cons\"],");
+        output.add("[\"ExprConstructor\", \"" + ctx.UPPERID().getText() + "\"],");
         decreaseIndentation();
  }
 
@@ -298,7 +298,6 @@ public class FlechaListenerParser implements FlechaListener {
         } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() == 2 && listExpressionLevel > 0) { //Empty literal inside list construction
             output.add("[\"ExprConstructor\", \"Nil\"]");
         } else if(ctx.LITERAL() !=null && ctx.LITERAL().getText().length() > 2 && listExpressionLevel > 0) { //Not empty literal inside list construction
-            System.out.println("Literal inside list construction expression: " +ctx.LITERAL().getText());
             outputStringAsListConstruction(ctx.LITERAL().getText().replaceAll("\"",""));
         } else if(ctx.CHAR() !=null && ctx.CHAR().getText().length() == 4) {
             output.add("[\"ExprChar\", " + (int)StringEscapeUtils.unescapeJava(ctx.CHAR().getText().substring(1,3)).charAt(0) + "]");
